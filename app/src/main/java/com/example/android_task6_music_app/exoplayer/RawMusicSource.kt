@@ -25,7 +25,7 @@ class RawMusicSource @Inject constructor(
         state = STATE_INITIALIZING
         val allSongs = musicDatabase.getAllSongs()
         songs = allSongs.map { song ->
-            MediaMetadataCompat.Builder()
+            Builder()
                 .putString(METADATA_KEY_ARTIST, song.artist)
                 .putString(METADATA_KEY_MEDIA_ID, song.id)
                 .putString(METADATA_KEY_TITLE, song.title)

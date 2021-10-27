@@ -7,21 +7,14 @@ import com.google.android.exoplayer2.Player
 
 class MusicPlayerEventListener(
     private val musicService: MusicService
-) : Player.EventListener {
+) : Player.Listener {
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         super.onPlayerStateChanged(playWhenReady, playbackState)
-        if(playbackState == Player.STATE_READY && !playWhenReady) {
+        if (playbackState == Player.STATE_READY && !playWhenReady) {
             musicService.stopForeground(false)
         }
     }
-
-/*    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-        super.onPlayWhenReadyChanged(playWhenReady, reason)
-        if (reason == Player.STATE_READY && !playWhenReady) {
-            musicService.stopForeground(false)
-        }
-    }*/
 
     override fun onPlayerError(error: PlaybackException) {
         super.onPlayerError(error)

@@ -1,6 +1,5 @@
 package com.example.android_task6_music_app.exoplayer
 
-import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
@@ -16,7 +15,7 @@ import com.example.android_task6_music_app.other.Constants.NOTIFICATION_ID
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 
-class MusicNotificationManager (
+class MusicNotificationManager(
     private val context: Context,
     sessionToken: MediaSessionCompat.Token,
     notificationListener: PlayerNotificationManager.NotificationListener,
@@ -51,6 +50,7 @@ class MusicNotificationManager (
     ) : PlayerNotificationManager.MediaDescriptionAdapter {
 
         override fun getCurrentContentTitle(player: Player): CharSequence {
+            newSongCallbacks()
             return mediaController.metadata.description.title.toString()
         }
 
@@ -58,7 +58,7 @@ class MusicNotificationManager (
             return mediaController.sessionActivity
         }
 
-        override fun getCurrentContentText(player: Player): CharSequence? {
+        override fun getCurrentContentText(player: Player): CharSequence {
             return mediaController.metadata.description.subtitle.toString()
         }
 

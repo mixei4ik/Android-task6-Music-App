@@ -1,8 +1,6 @@
 package com.example.android_task6_music_app.ui
 
 import android.os.Bundle
-import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.RequestManager
@@ -24,8 +22,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var glide: RequestManager
 
     private var curPlayingSong: Song? = null
-
-    private var playbackState: PlaybackStateCompat? = null
 
     private var logs = "start MediaSession..."
 
@@ -70,17 +66,16 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeToObservers() {
         mainViewModel.mediaItems.observe(this) {
             it?.let { result ->
-                when(result.status) {
+                when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.let { songs ->
-                            if(curPlayingSong == null && songs.isNotEmpty()) {
+                            if (curPlayingSong == null && songs.isNotEmpty()) {
                                 curPlayingSong = songs[0]
                                 updateTitleAndSongImage(songs[0])
                             }
                         }
                     }
                     else -> {
-                        Unit
                     }
                 }
             }

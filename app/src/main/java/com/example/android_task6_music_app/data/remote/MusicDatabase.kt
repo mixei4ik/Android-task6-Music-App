@@ -26,7 +26,8 @@ class MusicDatabase(context: Context) {
     fun getJsonDataFromAsset(context: Context): String? {
         val jsonString: String
         try {
-            jsonString = context.resources.openRawResource(R.raw.playlist).bufferedReader().use { it.readText() }
+            jsonString = context.resources.openRawResource(R.raw.playlist).bufferedReader()
+                .use { it.readText() }
         } catch (ioException: IOException) {
             ioException.printStackTrace()
             return null
