@@ -24,7 +24,7 @@ class RawMusicSource @Inject constructor(
 
     var songs = emptyList<MediaMetadataCompat>()
 
-    suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
+    suspend fun fetchMediaData() = withContext(Dispatchers.Main) {
         state = STATE_INITIALIZING
         val allSongs = musicDatabase.getAllSongs()
         Log.v(TAG, "allSongs " + allSongs.size)
@@ -70,7 +70,7 @@ class RawMusicSource @Inject constructor(
 
     private val onReadyListeners = mutableListOf<(Boolean) -> Unit>()
 
-    private var state: State = State.STATE_CREATED
+    private var state: State = STATE_CREATED
         set(value) {
             if(value == STATE_INITIALIZED || value == STATE_ERROR) {
                 synchronized(onReadyListeners) {
@@ -85,12 +85,12 @@ class RawMusicSource @Inject constructor(
         }
 
     fun whenReady(action: (Boolean) -> Unit): Boolean {
-        if(state == STATE_CREATED || state == STATE_INITIALIZING) {
+        return if(state == STATE_CREATED || state == STATE_INITIALIZING) {
             onReadyListeners += action
-            return false
+            false
         } else {
             action(state == STATE_INITIALIZED)
-            return true
+            true
         }
     }
 }

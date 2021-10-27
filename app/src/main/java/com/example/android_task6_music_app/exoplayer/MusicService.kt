@@ -84,11 +84,6 @@ class MusicService : MediaBrowserServiceCompat() {
 
         val musicPlaybackPreparer = MusicPlaybackPreparer(rawMusicSource) {
             curPlayingSong = it
-            preparePlayer(
-                rawMusicSource.songs,
-                it,
-                true
-            )
         }
 
         mediaSessionConnector = MediaSessionConnector(mediaSession)
@@ -109,14 +104,13 @@ class MusicService : MediaBrowserServiceCompat() {
 
     private fun preparePlayer(
         songs: List<MediaMetadataCompat>,
-        itemToPlay: MediaMetadataCompat?,
-        playNow: Boolean
+        itemToPlay: MediaMetadataCompat?
     ) {
         val curSongIndex = if(curPlayingSong == null) 0 else songs.indexOf(itemToPlay)
         exoPlayer.setMediaSource(rawMusicSource.asMediaSource(dataSourceFactory))
         exoPlayer.prepare()
         exoPlayer.seekTo(curSongIndex, 0L)
-        exoPlayer.playWhenReady = playNow
+        exoPlayer.playWhenReady = true
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -150,7 +144,7 @@ class MusicService : MediaBrowserServiceCompat() {
                     if (isInitialized) {
                         result.sendResult(rawMusicSource.asMediaItems())
                         if (!isPlayerInitialized && rawMusicSource.songs.isNotEmpty()) {
-                            preparePlayer(rawMusicSource.songs, rawMusicSource.songs[0], false)
+                            preparePlayer(rawMusicSource.songs, rawMusicSource.songs[0])
                             isPlayerInitialized = true
                         }
                     } else {
