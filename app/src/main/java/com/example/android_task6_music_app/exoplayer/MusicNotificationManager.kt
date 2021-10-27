@@ -31,7 +31,7 @@ class MusicNotificationManager (
         notificationManager = PlayerNotificationManager
             .Builder(context, NOTIFICATION_ID, NOTIFICATION_CHANNEL_ID)
             .setChannelNameResourceId(R.string.notification_channel_name)
-            .setChannelDescriptionResourceId(R.string.notification_channel_discription)
+            .setChannelDescriptionResourceId(R.string.notification_channel_description)
             .setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
             .setNotificationListener(notificationListener)
             .build()

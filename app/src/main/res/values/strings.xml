@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android-task6-Music-App</string>
+    <string name="app_name">Music App</string>
     <string name="notification_channel_name">Music Channel</string>
-    <string name="notification_channel_discription">Shows the currently playing music</string>
+    <string name="notification_channel_description">Shows the currently playing music</string>
 </resources>

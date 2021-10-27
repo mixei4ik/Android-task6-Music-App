@@ -106,11 +106,11 @@ class MusicService : MediaBrowserServiceCompat() {
         songs: List<MediaMetadataCompat>,
         itemToPlay: MediaMetadataCompat?
     ) {
-        val curSongIndex = if(curPlayingSong == null) 0 else songs.indexOf(itemToPlay)
+        val curSongIndex = if (curPlayingSong == null) 0 else songs.indexOf(itemToPlay)
         exoPlayer.setMediaSource(rawMusicSource.asMediaSource(dataSourceFactory))
         exoPlayer.prepare()
         exoPlayer.seekTo(curSongIndex, 0L)
-        exoPlayer.playWhenReady = true
+        exoPlayer.playWhenReady = false
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -138,7 +138,7 @@ class MusicService : MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        when(parentId) {
+        when (parentId) {
             MEDIA_ROOT_ID -> {
                 val resultsSent = rawMusicSource.whenReady { isInitialized ->
                     if (isInitialized) {

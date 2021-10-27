@@ -5,7 +5,6 @@ import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.*
-import android.util.Log
 import androidx.core.net.toUri
 import com.example.android_task6_music_app.data.remote.MusicDatabase
 import com.example.android_task6_music_app.exoplayer.State.*
@@ -16,8 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private const val TAG = "Raw Music Source"
-
 class RawMusicSource @Inject constructor(
     private val musicDatabase: MusicDatabase
 ) {
@@ -27,7 +24,6 @@ class RawMusicSource @Inject constructor(
     suspend fun fetchMediaData() = withContext(Dispatchers.Main) {
         state = STATE_INITIALIZING
         val allSongs = musicDatabase.getAllSongs()
-        Log.v(TAG, "allSongs " + allSongs.size)
         songs = allSongs.map { song ->
             MediaMetadataCompat.Builder()
                 .putString(METADATA_KEY_ARTIST, song.artist)
@@ -41,18 +37,15 @@ class RawMusicSource @Inject constructor(
                 .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.artist)
                 .build()
         }
-        Log.v(TAG, "songs " + songs.size)
         state = STATE_INITIALIZED
     }
 
     fun asMediaSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
         songs.forEach { song ->
-            Log.v(TAG, "start concatenatingMediaSource.addMediaSource(mediaSource) +1")
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
             concatenatingMediaSource.addMediaSource(mediaSource)
-            Log.v(TAG, "concatenatingMediaSource.addMediaSource(mediaSource) +1")
         }
         return concatenatingMediaSource
     }
@@ -72,7 +65,7 @@ class RawMusicSource @Inject constructor(
 
     private var state: State = STATE_CREATED
         set(value) {
-            if(value == STATE_INITIALIZED || value == STATE_ERROR) {
+            if (value == STATE_INITIALIZED || value == STATE_ERROR) {
                 synchronized(onReadyListeners) {
                     field = value
                     onReadyListeners.forEach { listener ->
@@ -85,7 +78,7 @@ class RawMusicSource @Inject constructor(
         }
 
     fun whenReady(action: (Boolean) -> Unit): Boolean {
-        return if(state == STATE_CREATED || state == STATE_INITIALIZING) {
+        return if (state == STATE_CREATED || state == STATE_INITIALIZING) {
             onReadyListeners += action
             false
         } else {
@@ -95,7 +88,7 @@ class RawMusicSource @Inject constructor(
     }
 }
 
-enum class State{
+enum class State {
     STATE_CREATED,
     STATE_INITIALIZING,
     STATE_INITIALIZED,
